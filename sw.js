@@ -9,12 +9,21 @@ self.addEventListener('message', e => { if (e.data === 'actualizar') self.skipWa
 self.addEventListener('activate', e => {
   e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k.startsWith('entrelineas-') && k !== CACHE).map(k => caches.delete(k)))).then(() => self.clients.claim()))
 })
+// Otras apps del mismo sitio de GitHub comparten el almacén de cachés y alguna puede borrar la nuestra:
+// al abrir la app con internet, si falta, se vuelve a guardar completa.
+const asegurar = () => caches.has(CACHE).then(h => h ? null : caches.open(CACHE).then(c => c.addAll(ARCHIVOS))).catch(() => null)
+const deRed = r => fetch(r).then(res => {
+  if (res.ok && res.type === 'basic') { const copia = res.clone(); caches.open(CACHE).then(c => c.put(r, copia)) }
+  return res
+})
 self.addEventListener('fetch', e => {
   const r = e.request
   if (r.method !== 'GET' || new URL(r.url).origin !== location.origin) return
+  if (new URL(r.url).pathname.indexOf(new URL(self.registration.scope).pathname) !== 0) return
   if (r.mode === 'navigate') {
+    e.waitUntil(asegurar())
     e.respondWith(caches.match('./', { cacheName: CACHE }).then(res => res || fetch(r)).catch(() => fetch(r)))
     return
   }
-  e.respondWith(caches.match(r, { ignoreSearch: true }).then(res => res || fetch(r)))
+  e.respondWith(caches.match(r, { cacheName: CACHE, ignoreSearch: true }).then(res => res || deRed(r)))
 })
