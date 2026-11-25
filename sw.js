@@ -1,6 +1,6 @@
-// Service worker de Entrelíneas 3.0. Lo genera tools/pwa.mjs: no se edita a mano.
-const CACHE = 'entrelineas-v3.0-9a244c88'
-const ARCHIVOS = ["./","./app-DBCsTJ7o.js","./apple-touch-icon.png","./atkinson-hyperlegible-latin-400-normal-BrHNak5F.woff2","./atkinson-hyperlegible-latin-700-normal-GZI4o3u0.woff2","./icono-192.png","./icono-512.png","./icono-maskable-512.png","./index-D8W0h1YU.css","./index.html","./literata-latin-400-italic-BxdXY0No.woff2","./literata-latin-400-normal-CLtNJ872.woff2","./literata-latin-700-normal-DYBWKELl.woff2","./manifest.webmanifest","./parte-5LJwNAhe.js","./parte-BsKrkpYR.js","./parte-DOwCrGXH.js"]
+// Service worker de Entrelíneas 3.0.1. Lo genera tools/pwa.mjs: no se edita a mano.
+const CACHE = 'entrelineas-v3.0.1-bbbb221d'
+const ARCHIVOS = ["./","./app-DKo2_yDb.js","./apple-touch-icon.png","./atkinson-hyperlegible-latin-400-normal-BrHNak5F.woff2","./atkinson-hyperlegible-latin-700-normal-GZI4o3u0.woff2","./icono-192.png","./icono-512.png","./icono-maskable-512.png","./index-Bz4VJ3th.css","./index.html","./literata-latin-400-italic-BxdXY0No.woff2","./literata-latin-400-normal-CLtNJ872.woff2","./literata-latin-700-normal-DYBWKELl.woff2","./manifest.webmanifest","./parte-BbMdcw0p.js","./parte-BdIgrs-h.js","./parte-DOwCrGXH.js"]
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ARCHIVOS)).then(() => self.registration.active ? null : self.skipWaiting()))
